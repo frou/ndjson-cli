@@ -1,10 +1,23 @@
-var resolve = require("./resolve");
+var resolve = require('./resolve')
 
-module.exports = function(module, sandbox) {
-  var i = module.indexOf("="), name = module;
-  if (i >= 0) name = module.slice(0, i), module = module.slice(i + 1);
-  module = require(resolve(module));
-  if (sandbox[name]) Object.assign(sandbox[name], module);
-  else sandbox[name] = module;
-  return sandbox;
-};
+module.exports = function (module, sandbox) {
+  var identifier
+  var eqIdx = module.indexOf('=')
+
+  if (eqIdx < 0) {
+    identifier = module
+  } else {
+    identifier = module.slice(0, eqIdx)
+    module = module.slice(eqIdx + 1)
+  }
+
+  module = require(resolve(module))
+
+  if (sandbox[identifier]) {
+    Object.assign(sandbox[identifier], module)
+  } else {
+    sandbox[identifier] = module
+  }
+
+  return sandbox
+}
